@@ -1,0 +1,72 @@
+PATH: ./ # to be removed
+
+boxsize: 1500.
+SN: 4900.371464726499 # 1/nbar in (Mpc/h)^3
+PiConvention: CMB # options: LSS, CMB
+FlatCosmology: True
+
+binning:
+  type: Effective # options: Average, Effective, Expansion
+  grid:
+    dk: 1
+    cf: 1
+    nbinsP: 128
+    nbinsB: 29
+  SNLeaking: False # only used if binning['type'] == Average
+
+data_files:
+  P0: prova_p0_pbj.txt
+  P2: prova_p2_pbj.txt
+  P4: prova_p4_pbj.txt
+
+input_cosmology: # to initialise base quantities -- from Yoursy 12 Jan 2026
+  h: 0.6732
+  Obh2: 0.023008000249726174
+  Och2: 0.1201033252492084
+  ns: 0.96
+  As: 2.20192887130619e-9
+  tau: 0.09
+  Tcmb: 2.73
+  z: 1.
+  inputfile: null
+  Mnu: 0.
+
+covariance:
+  type: covariance # options: covariance, variance
+  file: prova_cov_pbj.txt
+  NMocks: 10000
+
+window:
+  convolve: all # options: "all", "no_sn" (WIP), null
+  file: /home/cosmologi/fmontano/Plot4TalkCollection/input_data/Mixing_Matrix_BGS_BRIGHTvRSD_z0.10-0.50_ALL_ORDERS.pickle
+  grid:
+    kpmaxConv: 0.5 # options: value or None
+    epsilonkpConv: 0.1 # options: value or None (overrides kpmaxConv)
+
+likelihood:
+  observables: ['P0', 'P2', 'P4'] # options: Pk, Bk, P0, P2, P4, B0, B2, B4
+  type: Gaussian # options: Gaussian, Hartlap, Sellentin
+  cosmology: fixed # options: fixed, varied
+  do_analytic_marg: False # only for varied cosmology, no 'fast' option avail
+  priors: priors.yaml # path to the prior yaml
+  sampler: emcee # options: emcee, MetropolisHastings, nautilus, pocomc, ultranest
+  check_convergence: False # only for emcee sampler
+  resume: False
+
+theory:
+  linear: bacco # options: camb, bacco
+  IRresum: True
+  IRresum_kind: EH # options EH, DST
+  do_redshift_rescaling: True
+
+AP:
+  do_AP: False
+  AP_as_nuisance: False
+  fiducial_cosmology:
+    h: 0.695
+    Obh2: 0.02224
+    Och2: 0.115422125
+
+output:
+  folder: ConvolutionFixedTest # create results folder if doesn't exist
+  comment: _convolution_fixed # string to be appended to filenames
